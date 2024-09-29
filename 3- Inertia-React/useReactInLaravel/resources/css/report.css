@@ -1,0 +1,58 @@
+.report {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 90%;
+  height: 90%;
+
+  background-color: #edfdfb;
+
+  border-radius: 4px;
+
+  font-size: 27.65px;
+
+  padding: 1em;
+
+  display: grid;
+  grid-template-rows: 1fr auto;
+  row-gap: 1em;
+
+  /* justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: center; */
+
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.report .operation {
+  display: flex;
+
+  justify-content: space-around;
+}
+
+.report .operation button,
+.report .operation button:hover {
+  font-size: 27.65px;
+
+  padding: 0.4em;
+
+  color: #061c23;
+  background-color: #48bfe3;
+
+  border: 1px solid #061c23;
+
+  border-radius: 4px;
+
+  cursor: pointer;
+}
+
+.report .operation button:hover {
+  background-color: #16718d;
+  color: #edf9fc;
+
+  border: 1px solid #edf9fc;
+}

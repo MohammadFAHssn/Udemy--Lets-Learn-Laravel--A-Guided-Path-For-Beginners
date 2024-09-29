@@ -1,0 +1,28 @@
+.body .operation {
+  display: flex;
+
+  justify-content: space-around;
+}
+
+.body .operation button,
+.body .operation button:hover {
+  font-size: 27.65px;
+
+  padding: 0.4em;
+
+  color: #061c23;
+  background-color: #48bfe3;
+
+  border: 1px solid #061c23;
+
+  border-radius: 4px;
+
+  cursor: pointer;
+}
+
+.body .operation button:hover {
+  background-color: #16718d;
+  color: #edf9fc;
+
+  border: 1px solid #edf9fc;
+}

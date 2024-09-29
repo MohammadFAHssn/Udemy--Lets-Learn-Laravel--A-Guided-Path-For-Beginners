@@ -1,0 +1,60 @@
+.issuance-trip {
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  background-color: #edfdfb;
+  color: #084940;
+
+  border-radius: 4px;
+
+  font-size: 27.65px;
+
+  padding: 2em;
+
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-template-rows: repeat(5, auto);
+  column-gap: 0.6em;
+  row-gap: 1em;
+
+  justify-content: center;
+  align-content: center;
+  justify-items: center;
+  align-items: center;
+
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.issuance-trip .inputs {
+  font-size: 23.04px;
+
+  padding: 0.2em;
+
+  width: 10em;
+}
+
+.issuance-trip .button,
+.issuance-trip .button:hover {
+  font-size: 27.65px;
+
+  padding: 0.2em;
+
+  color: #061c23;
+  background-color: #48bfe3;
+
+  border: 1px solid #061c23;
+
+  border-radius: 4px;
+
+  cursor: pointer;
+}
+
+.issuance-trip .button:hover {
+  background-color: #16718d;
+  color: #edf9fc;
+
+  border: 1px solid #edf9fc;
+}
