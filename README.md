@@ -60,13 +60,13 @@ Path: app/providers/AuthServiceProvider
 
 ## Log in
 
-<img src="./images/image-14.png" width="1100px" style="border: 1px solid white"/>
+<img src="./images/image-14.png" style="border: 1px solid white"/>
 
-<img src="./images/image-15.png" width="300px" style="border: 1px solid white"/>
+<img src="./images/image-15.png" style="border: 1px solid white"/>
 
 ## Log out
 
-<img src="./images/image-16.png" width="300px" style="border: 1px solid white"/>
+<img src="./images/image-16.png" style="border: 1px solid white"/>
 
 ## Repository
 
@@ -74,13 +74,13 @@ Path: app/providers/AuthServiceProvider
 Auth()->user()->username or id
 ```
 
-<img src="./images/image-17.png" width="700px" style="border: 1px solid white"/>
+<img src="./images/image-17.png" style="border: 1px solid white"/>
 
-<img src="./images/image-18.png" width="500px" style="border: 1px solid white"/>
+<img src="./images/image-18.png" style="border: 1px solid white"/>
 
-<img src="./images/image-19.png" width="800px" style="border: 1px solid white"/>
+<img src="./images/image-19.png" style="border: 1px solid white"/>
 
-<img src="./images/image-20.png" width="600px" style="border: 1px solid white"/>
+<img src="./images/image-20.png" style="border: 1px solid white"/>
 
 ```php
 $user -> delete()
@@ -89,6 +89,6 @@ $user -> update($incomingFields)
 
 ## Relations
 
-<img src="./images/image-21.png" width="600px" style="border: 1px solid white"/>
+<img src="./images/image-21.png" style="border: 1px solid white"/>
 
-<img src="./images/image-22.png" width="800px" style="border: 1px solid white"/>
+<img src="./images/image-22.png" style="border: 1px solid white"/>
