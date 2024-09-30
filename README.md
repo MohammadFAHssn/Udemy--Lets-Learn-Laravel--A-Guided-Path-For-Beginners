@@ -4,15 +4,15 @@
 
 Path: \bootstrap\app.php
 
-<img src="./images/image.png" width="900px" style="border: 1px solid white"/>
+<img src="./images/image.png" style="border: 1px solid white"/>
 
 ```bash
 php artisan make:middleware MiddleWareName
 ```
 
-<img src="./images/image-1.png" width="600px" style="border: 1px solid white"/>
+<img src="./images/image-1.png" style="border: 1px solid white"/>
 
-<img src="./images/image-2.png" width="600px" style="border: 1px solid white"/>
+<img src="./images/image-2.png" style="border: 1px solid white"/>
 
 ## Policy
 
@@ -22,41 +22,41 @@ Path: app/policies
 php artisan make:policy ModelNamePolicy –-model=ModelName
 ```
 
-<img src="./images/image-3.png" width="500px" style="border: 1px solid white"/>
+<img src="./images/image-3.png" style="border: 1px solid white"/>
 
-<img src="./images/image-4.png" width="500px" style="border: 1px solid white"/>
+<img src="./images/image-4.png" style="border: 1px solid white"/>
 
-<img src="./images/image-5.png" width="300px" style="border: 1px solid white"/>
+<img src="./images/image-5.png" style="border: 1px solid white"/>
 
-<img src="./images/image-6.png" width="900px" style="border: 1px solid white"/>
+<img src="./images/image-6.png" style="border: 1px solid white"/>
 
 ## Moderator and gate
 
 Path: app/policies
 
-<img src="./images/image-7.png" width="400px" style="border: 1px solid white"/>
+<img src="./images/image-7.png" style="border: 1px solid white"/>
 
 ## Gate
 
 Path: app/providers/AuthServiceProvider
 
-<img src="./images/image-8.png" width="500px" style="border: 1px solid white"/>
+<img src="./images/image-8.png" style="border: 1px solid white"/>
 
-<img src="./images/image-9.png" width="500px" style="border: 1px solid white"/>
+<img src="./images/image-9.png" style="border: 1px solid white"/>
 
-<img src="./images/image-10.png" width="500px" style="border: 1px solid white"/>
+<img src="./images/image-10.png" style="border: 1px solid white"/>
 
 ## Request
 
-<img src="./images/image-11.png" width="1200px" style="border: 1px solid white"/>
+<img src="./images/image-11.png" style="border: 1px solid white"/>
 
 ## php basics
 
-<img src="./images/image-12.png" width="300px" style="border: 1px solid white"/>
+<img src="./images/image-12.png" style="border: 1px solid white"/>
 
 ## Register
 
-<img src="./images/image-13.png" width="1000px" style="border: 1px solid white"/>
+<img src="./images/image-13.png" style="border: 1px solid white"/>
 
 ## Log in
 
