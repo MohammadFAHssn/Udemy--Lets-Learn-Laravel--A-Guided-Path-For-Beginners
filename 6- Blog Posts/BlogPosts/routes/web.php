@@ -28,7 +28,7 @@ Route::get('/profile/{user:username}', [UserController::class, 'profile']);
 // hear 'user:username' -> looking up based upon the username
 
 Route::delete('/post/{post}', [PostController::class, 'delete']);
-Route::delete('/post/{post}', [PostController::class, 'delete'])->middleware('can:delete, post'); ???
+Route::delete('/post/{post}', [PostController::class, 'delete'])->middleware('can:delete, post'); // ???
 
 Route::get('/post/{post}/edit', [PostController::class, 'showEditForm']);
 Route::put('/post/{post}', [PostController::class, 'edit']);
