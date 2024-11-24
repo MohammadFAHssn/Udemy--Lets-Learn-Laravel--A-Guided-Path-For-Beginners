@@ -96,3 +96,25 @@ $user -> update($incomingFields)
 <img src="./images/image-21.png" style="border: 1px solid white"/>
 
 <img src="./images/image-22.png" style="border: 1px solid white"/>
+
+## Tips
+
+```php
+Log::info
+```
+
+```bash
+php artisan cache:forget spatie.permission.cache
+```
+
+```
+php artisan optimize:clear
+php artisan optimize
+php artisan clear-compiled
+php artisan config:cache
+php artisan route:cache
+composer dump-autoload
+php artisan view:cache
+npm cache clean --force
+
+```
