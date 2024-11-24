@@ -107,7 +107,7 @@ Log::info
 php artisan cache:forget spatie.permission.cache
 ```
 
-```
+```bash
 php artisan optimize:clear
 php artisan optimize
 php artisan clear-compiled
@@ -116,5 +116,4 @@ php artisan route:cache
 composer dump-autoload
 php artisan view:cache
 npm cache clean --force
-
 ```
