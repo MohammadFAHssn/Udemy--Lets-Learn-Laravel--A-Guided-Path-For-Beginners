@@ -51,10 +51,12 @@ class User extends Authenticatable
         return $this->hasMany(Post::class, 'user_id');
     }
 
+    // accessor
+    // we have an avatar field in User model that does not have a relation
     protected function avatar(): Attribute
     {
         return Attribute::make(get: function ($value) {
-            return $value;
+            return $value ? '/storage/avatars/' . $value : 'fallback-avatar.jpg';
         });
     }
 }

@@ -87,6 +87,10 @@ $user -> delete()
 $user -> update($incomingFields)
 ```
 
+## models
+
+<img src="./images/accessor.png" style="border: 1px solid white"/>
+
 ## Relations
 
 <img src="./images/image-21.png" style="border: 1px solid white"/>
