@@ -113,7 +113,7 @@ php artisan optimize
 php artisan clear-compiled
 php artisan config:cache
 php artisan route:cache
-composer dump-autoload
 php artisan view:cache
+composer dump-autoload
 npm cache clean --force
 ```
