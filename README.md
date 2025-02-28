@@ -1,5 +1,15 @@
 # Udemy - Let's Learn Laravel A Guided Path For Beginners 2023
 
+## Migration
+
+instead of
+
+```php
+$table->foreignId('user_id');
+```
+
+<img src="./images//migration.png" style="border: 1px solid white; width: 600px"/>
+
 ## Middleware
 
 Path: \bootstrap\app.php
