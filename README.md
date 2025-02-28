@@ -8,7 +8,7 @@ instead of
 $table->foreignId('user_id');
 ```
 
-<img src="./images//migration.png" style="border: 1px solid white; width: 600px"/>
+<img src="./images/migration.png" style="border: 1px solid white; width: 600px"/>
 
 ## Middleware
 
