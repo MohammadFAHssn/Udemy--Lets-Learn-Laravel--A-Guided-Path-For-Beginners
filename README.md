@@ -97,6 +97,37 @@ $user -> delete()
 $user -> update($incomingFields)
 ```
 
+---
+
+<img src="./images/repository.png" style="border: 1px solid white; width: 450px"/>
+
+Let's say in your user table you have a field that is user_type and that can have values of user / admin
+
+Obviously, you don't want users to be able to update this value. someone could inject into a form a new field for user_type and send 'admin' along with the other form data, and easily switch their account to an admin account... bad news.
+
+By adding:
+
+```php
+$fillable = ['name', 'password', 'email'];
+```
+
+You are ensuring that only those values can be updated using mass assignment
+
+To be able to update the user_type value, you need to explicitly set it on the model and save it, like this:
+
+```php
+$user->user_type = 'admin';
+$user->save();
+```
+
+---
+
+```php
+$existCheck = Follow::where(some query)->count(); // pay attention to count!
+```
+
+---
+
 ## models
 
 <img src="./images/accessor.png" style="border: 1px solid white"/>
