@@ -1,5 +1,13 @@
 # Udemy - Let's Learn Laravel A Guided Path For Beginners 2023
 
+## Commands
+
+```bash
+php artisan serve --host=somedomain.com --port=8001
+```
+
+---
+
 ## Migration
 
 instead of
