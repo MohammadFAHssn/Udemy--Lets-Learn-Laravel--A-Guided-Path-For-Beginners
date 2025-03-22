@@ -139,6 +139,8 @@ $existCheck = Follow::where(some query)->count(); // pay attention to count!
 ## models
 
 <img src="./images/accessor.png" style="border: 1px solid white"/>
+<img src="./images/hasManyThrough-2.png" style="border: 1px solid white; width: 1000px"/>
+<img src="./images/hasManyThrough.png" style="border: 1px solid white; width: 1000px"/>
 
 ## Relations
 
