@@ -99,13 +99,3 @@ class PostController extends Controller
     }
 
 }
-
-//
-
-
-public function viewSinglePost(Post $postId)
-// Laravel can perform database lookups for us
-{
-    // return $postId->title;
-    // return $postId->user->username;
-}
