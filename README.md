@@ -136,6 +136,10 @@ $existCheck = Follow::where(some query)->count(); // pay attention to count!
 
 ---
 
+> ```php
+> $user->isEmpty(); // pay attention to isEmpty()!
+> ```
+
 ## models
 
 <img src="./images/accessor.png" style="border: 1px solid white"/>
