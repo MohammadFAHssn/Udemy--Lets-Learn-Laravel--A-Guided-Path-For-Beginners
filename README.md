@@ -158,6 +158,10 @@ show us all blog posts that contain the word "Brad". we're not saying, only show
 
 <img src="./images/search-url.png" style="border: 1px solid white; width: 250px" />
 
+```bash
+composer require laravel/scout
+```
+
 ## Tips
 
 ```php
