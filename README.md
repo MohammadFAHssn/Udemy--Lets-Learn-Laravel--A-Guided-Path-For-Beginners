@@ -152,6 +152,10 @@ $existCheck = Follow::where(some query)->count(); // pay attention to count!
 
 <img src="./images/image-22.png" style="border: 1px solid black"/>
 
+## Search
+
+show us all blog posts that contain the word "Brad". we're not saying, only show us posts where the entire value for the title column is literally nothing but the word "Brad", We're trying to say if the value in there if at any point it contains the word "Brad" inside it. Now, there are many different ways to accomplish this
+
 ## Tips
 
 ```php
