@@ -18,6 +18,19 @@ $table->foreignId('user_id');
 
 <img src="./images/migration.png" style="border: 1px solid white; width: 600px"/>
 
+## Seeder
+
+```php
+DB::table('users')->insert([
+    'id' => 1,
+    'username' => 'brad',
+    'email' => 'brad@local',
+    'password' => Hash::make('qwertyqwerty'), // pay attention to this
+    'isAdmin' => 1
+]);
+
+```
+
 ## Middleware
 
 Path: \bootstrap\app.php
