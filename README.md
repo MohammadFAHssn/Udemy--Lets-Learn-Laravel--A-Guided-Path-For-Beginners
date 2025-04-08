@@ -190,6 +190,19 @@ composer require laravel/scout
 
 <img src="./images/search-4.png" style="border: 1px solid white; width: 500px; display: block;" />
 
+## Events and listeners
+
+<img src="./images/events-listeners.png" style="border: 1px solid white; width: 700px; display: block;" />
+<img src="./images/events-listeners-2.png" style="border: 1px solid white; width: 500px; display: block;" />
+
+```bash
+php artisan event:generate
+```
+
+<img src="./images/events-listeners-3.png" style="border: 1px solid white; width: 700px; display: block;" />
+<img src="./images/events-listeners-4.png" style="border: 1px solid white; width: 700px; display: block;" />
+<img src="./images/events-listeners-5.png" style="border: 1px solid white; width: 800px; display: block;" />
+
 ## Tips
 
 ```php
