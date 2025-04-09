@@ -244,6 +244,14 @@ php artisan make:job SendNewPostEmail
 php artisan schedule:work
 ```
 
+## Cache
+
+What if that was a complex or expensive or slow query to run. The idea is that every single time someone refreshes the home page, we would not want to have to run that query again and again and again
+<img src="./images/cache.png" style="border: 1px solid black; width: 600px; display: block;" />
+How long do you want it to stay in the cache?
+<img src="./images/cache-2.png" style="border: 1px solid black; width: 600px; display: block;" />
+if you're retrieving data from some sort of third party API where it's going to require a network request on your end
+
 ## Tips
 
 ```php
