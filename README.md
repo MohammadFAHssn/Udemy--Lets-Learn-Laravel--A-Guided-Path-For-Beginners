@@ -203,6 +203,38 @@ php artisan event:generate
 <img src="./images/events-listeners-4.png" style="border: 1px solid white; width: 700px; display: block;" />
 <img src="./images/events-listeners-5.png" style="border: 1px solid white; width: 800px; display: block;" />
 
+## Chat - Broadcasting
+
+## Email - Sending Email
+
+## Adding jobs to the Queue (Async)
+
+```bash
+php artisan make:job SendNewPostEmail
+```
+
+> <img src="./images/job.png" style="border: 1px solid white; width: 600px; display: block;" />
+> essentially in this job file This is where we would want to send the email, not in our post controller
+
+<img src="./images/job-2.png" style="border: 1px solid white; width: 600px; display: block;" />
+
+> <img src="./images/job-3.png" style="border: 1px solid white; width: 800px; display: block;" />
+> don't forget:
+>
+> ```php
+> public $incoming;
+> ```
+
+<img src="./images/job-4.png" style="border: 1px solid white; width: 400px; display: block;" />
+
+<img src="./images/job-5.png" style="border: 1px solid white; width: 600px; display: block;" />
+
+> ```bash
+> php artisan queue:work
+> ```
+>
+> If you don't have that task up and running, Laravel is just going to keep adding new jobs to the queue
+
 ## Tips
 
 ```php
