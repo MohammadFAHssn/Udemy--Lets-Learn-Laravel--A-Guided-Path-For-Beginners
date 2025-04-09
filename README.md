@@ -235,6 +235,15 @@ php artisan make:job SendNewPostEmail
 >
 > If you don't have that task up and running, Laravel is just going to keep adding new jobs to the queue
 
+## Scheduling tasks
+
+<img src="./images/scheduling-tasks.png" style="border: 1px solid white; width: 700px; display: block;" />
+<img src="./images/scheduling-tasks-2.png" style="border: 1px solid black; width: 600px; display: block;" />
+
+```bash
+php artisan schedule:work
+```
+
 ## Tips
 
 ```php
