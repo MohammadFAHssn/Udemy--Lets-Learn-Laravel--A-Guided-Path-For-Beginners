@@ -252,6 +252,8 @@ How long do you want it to stay in the cache?
 <img src="./images/cache-2.png" style="border: 1px solid black; width: 600px; display: block;" />
 if you're retrieving data from some sort of third party API where it's going to require a network request on your end
 
+## API Authentication
+
 ## Tips
 
 ```php
