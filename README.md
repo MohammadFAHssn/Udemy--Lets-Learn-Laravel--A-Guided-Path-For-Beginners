@@ -254,6 +254,16 @@ if you're retrieving data from some sort of third party API where it's going to 
 
 ## API Authentication
 
+## Going Live Practice
+
+VPS let you set up a brand new fresh Linux box that you are in 100% complete control over.
+
+Now, you might be saying though, Brad that's cool, but I don't want to learn about Linux and the command line and how to SSH into a machine and a server. there's a great option and it's the official Laravel option called Forge So with Forge, you would still have to connect your Laravel Forge account to your digital ocean(vps) account But the idea is that Laravel Forge, the official Laravel Solution, it will connect to those services and it will provision and create a Linux server from scratch So it will set up everything for you It will create the perfect environment, and then you just push your Laravel source code files up and the rest is taken care of for you.
+
+### Docker
+
+**this is not how you would ever use Docker quote, in the real world.** And I'm purposely going to go against all of the Docker best practices. So we're going to break all of those Docker best practices. **We're going to use our imagination that our Docker container is a VPS server**
+
 ## Tips
 
 ```php
