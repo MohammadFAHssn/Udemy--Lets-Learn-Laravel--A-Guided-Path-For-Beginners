@@ -264,6 +264,71 @@ Now, you might be saying though, Brad that's cool, but I don't want to learn abo
 
 **this is not how you would ever use Docker quote, in the real world.** And I'm purposely going to go against all of the Docker best practices. So we're going to break all of those Docker best practices. **We're going to use our imagination that our Docker container is a VPS server**
 
+when it comes time to actually host your application for real on a public server somewhere, well, you wouldn't just run `PHP artisan serve` You would want to set up a real web host that just hosts your application by default without you running any commands.
+
+in terminal command this:
+
+> ```bash
+> docker run -dit -p 80:80 ubuntu:24.04
+> ```
+>
+> - -d (detached mode): Runs the container in the background, allowing you to continue using the terminal.
+>
+> - The combination of -i and -t (-it) is commonly used to interact with containers via the command line. port 80 in our container is available as port 80 on our host machine. This means that any network traffic sent to port 80 on the host will be directed to port 80 in the container.
+
+go into the docker desktop application. And now if you click on images in the left hand sidebar ...
+
+But better yet, if you click on containers in the left hand sidebar. So what we want to do now is just open a command line interface for this container. So what I like to do is to just click on the name. Well, then you can click terminal here. Or better yet, I like to use this option here that says open an external terminal.
+
+let's install a web server. I'm a big fan of the web server that's called nginx, so you can do this with me
+
+```bash
+sudo apt update
+sudo apt install nginx
+```
+
+Now, if we were on a real actual Linux computer nginx would start up automatically. But because we're in a Docker container So we need to go manually start up our web server
+
+```bash
+/etc/init.d/nginx start #init.d folder and nginx command
+```
+
+<img src="./images/nginx.png" style="border: 1px solid red; width: 700px; display: block;" />
+
+This is just the default welcome or starter site that's being hosted, we can create a new site for nginx to host
+
+now we want ot install some necessary tools:
+php:
+Shouldn't we install PHP itself???
+
+> <img src="./images/install-php.png" style="border: 1px solid white; width: 900px; display: block;" />
+>
+> - php-cli: run php code in command line interface
+> - php8.1-gd: This is a graphics library that's used for when we resize avatar image uploads
+> - FPM (FastCGI Process Manager) is a primary PHP FastCGI implementation containing some features (mostly) useful for heavy-loaded sites.
+
+install composer ...
+
+install mysql ...
+if we were using a real actual Linux VPS, mySQL would just start automatically anytime you reboot the system
+
+```bash
+/etc/init.d/mysql start
+```
+
+moving our source code files onto out VPS(docker container): open up the windows command line
+
+in docker:
+
+```bash
+docker cp /User/brad/Desktop/laravel-projects/ourmainapp cranky_franklin:/var/www/ourapp #cranky_franklin: our container name
+```
+
+> <img src="./images/copy-files-to-docker.png" style="border: 1px solid white; width: 900px; display: block;" />
+> you can see that nginx by default has an HTML folder that is what contains the files for this default Welcome to nginx project
+
+So what we need to do now is simply, instead of just serving up this default website, we want nginx to serve up our new files. We want to serve the "public" folder.
+
 ## Tips
 
 ```php
