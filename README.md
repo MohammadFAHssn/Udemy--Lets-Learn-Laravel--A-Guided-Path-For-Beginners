@@ -341,11 +341,15 @@ php artisan cache:forget spatie.permission.cache
 
 ```bash
 php artisan optimize:clear
+php artisan config:clear
 php artisan optimize
 php artisan clear-compiled
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
 composer dump-autoload
+```
+
+```bash
 npm cache clean --force
 ```
