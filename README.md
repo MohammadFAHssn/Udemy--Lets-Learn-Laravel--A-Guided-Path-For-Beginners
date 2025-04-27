@@ -159,6 +159,10 @@ $existCheck = Follow::where(some query)->count(); // pay attention to count!
 <img src="./images/hasManyThrough-2.png" style="border: 1px solid black; width: 1000px; display: block;" />
 <img src="./images/hasManyThrough.png" style="border: 1px solid black; width: 1000px; display: block;" />
 
+### query scopes
+
+https://laravel.com/docs/11.x/eloquent#query-scopes
+
 ## Relations
 
 <img src="./images/image-21.png" style="border: 1px solid black; display: block;" />
@@ -328,6 +332,89 @@ docker cp /User/brad/Desktop/laravel-projects/ourmainapp cranky_franklin:/var/ww
 > you can see that nginx by default has an HTML folder that is what contains the files for this default Welcome to nginx project
 
 So what we need to do now is simply, instead of just serving up this default website, we want nginx to serve up our new files. We want to serve the "public" folder.
+
+## spatie/laravel-permission
+
+```php
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
+$role = Role::create(['name' => 'writer']);
+$permission = Permission::create(['name' => 'edit articles']);
+```
+
+Assign A Permission To A Role:
+```php
+$role->givePermissionTo($permission);
+$permission->assignRole($role);
+```
+
+Sync Permissions To A Role:
+Multiple permissions:
+```php
+$role->syncPermissions($permissions);
+$permission->syncRoles($roles);
+```
+
+Remove Permission From A Role:
+```php
+$role->revokePermissionTo($permission);
+$permission->removeRole($role);
+```
+
+```php
+// get a list of all permissions directly assigned to the user
+$permissionNames = $user->getPermissionNames(); // collection of name strings
+$permissions = $user->permissions; // collection of permission objects
+
+// get all permissions for the user, either directly, or from roles, or from both
+$permissions = $user->getDirectPermissions();
+$permissions = $user->getPermissionsViaRoles();
+$permissions = $user->getAllPermissions();
+
+// get the names of the user's roles
+$roles = $user->getRoleNames(); // Returns a collection
+```
+
+The role and withoutRole scopes can accept a string, a `\Spatie\Permission\Models\Role` object or an `\Illuminate\Support\Collection` object:
+```php
+$users = User::role('writer')->get(); // Returns only users with the role 'writer'
+$nonEditors = User::withoutRole('editor')->get(); // Returns only users without the role 'editor'
+```
+
+The scope can accept a string, a `\Spatie\Permission\Models\Permission` object or an `\Illuminate\Support\Collection` object:
+```php
+$users = User::permission('edit articles')->get(); // Returns only users with the permission 'edit articles' (inherited or directly)
+$usersWhoCannotEditArticles = User::withoutPermission('edit articles')->get(); // Returns all users without the permission 'edit articles' (inherited or directly)
+```
+
+
+```php
+$allUsersWithAllTheirRoles = User::with('roles')->get();
+$allUsersWithAllTheirDirectPermissions = User::with('permissions')->get();
+$allRolesInDatabase = Role::all()->pluck('name');
+$usersWithoutAnyRoles = User::doesntHave('roles')->get();
+$allRolesExceptAandB = Role::whereNotIn('name', ['role A', 'role B'])->get();
+```
+
+```php
+$user->givePermissionTo('edit articles');
+
+// You can also give multiple permission at once
+$user->givePermissionTo('edit articles', 'delete articles');
+
+// You may also pass an array
+$user->givePermissionTo(['edit articles', 'delete articles']);
+```
+
+```php
+$user->revokePermissionTo('edit articles');
+```
+
+Or revoke & add new permissions in one go:
+```php
+$user->syncPermissions(['edit articles', 'delete articles']);
+```
 
 ## Tips
 
