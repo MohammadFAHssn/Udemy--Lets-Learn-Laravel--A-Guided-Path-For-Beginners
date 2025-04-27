@@ -335,6 +335,8 @@ So what we need to do now is simply, instead of just serving up this default web
 
 ## spatie/laravel-permission
 
+
+
 ```php
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -416,6 +418,106 @@ Or revoke & add new permissions in one go:
 $user->syncPermissions(['edit articles', 'delete articles']);
 ```
 
+This will also allow you to use Super-Admin features provided by Laravel's Gate:
+
+```php
+$user->can('edit articles');
+```
+
+NOTE: The following hasPermissionTo, hasAnyPermission, hasAllPermissions functions do not support Super-Admin functionality. Use can, canAny, canAll instead.
+
+```php
+$user->hasPermissionTo('edit articles');
+```
+
+Or you may pass an integer representing the permission id
+
+```php
+$user->hasPermissionTo('1');
+```
+
+```php
+$user->hasAnyPermission(['edit articles', 'publish articles', 'unpublish articles']);
+```
+
+```php
+$user->hasAllPermissions(['edit articles', 'publish articles', 'unpublish articles']);
+```
+
+You may also pass integers to lookup by permission id
+
+```php
+$user->hasAnyPermission(['edit articles', 1, 5]);
+```
+
+```php
+$user->assignRole('writer');
+$user->assignRole('writer', 'admin');
+$user->assignRole(['writer', 'admin']);
+```
+
+```php
+$user->removeRole('writer');
+```
+
+```php
+// All current roles will be removed from the user and replaced by the array given
+$user->syncRoles(['writer', 'admin']);
+```
+
+```php
+$user->hasRole('writer');
+
+// or at least one role from an array of roles:
+$user->hasRole(['editor', 'moderator']);
+
+$user->hasAnyRole(['writer', 'reader']);
+// or
+$user->hasAnyRole('writer', 'reader');
+
+$user->hasAllRoles(Role::all());
+
+$user->hasExactRoles(Role::all()); ???
+```
+The assignRole, hasRole, hasAnyRole, hasAllRoles, hasExactRoles and removeRole functions can accept a string, a \Spatie\Permission\Models\Role object or an \Illuminate\Support\Collection object.
+
+```php
+$role->hasPermissionTo('edit articles');
+```
+
+```php
+// get collection
+$role->permissions;
+```
+
+```php
+// Check if the user has Direct permission
+$user->hasDirectPermission('edit articles')
+
+// Check if the user has All direct permissions
+$user->hasAllDirectPermissions(['edit articles', 'delete articles']);
+
+// Check if the user has Any permission directly
+$user->hasAnyDirectPermission(['create articles', 'delete articles']);
+```
+
+```php
+Route::group(['middleware' => ['role:manager']], function () { ... });
+Route::group(['middleware' => ['permission:publish articles']], function () { ... });
+Route::group(['middleware' => ['role_or_permission:publish articles']], function () { ... });
+
+// multiple middleware
+Route::group(['middleware' => ['role:manager','permission:publish articles']], function () { ... });
+```
+
+You can specify multiple roles or permissions with a | (pipe) character, which is treated as OR:
+
+```php
+Route::group(['middleware' => ['role:manager|writer']], function () { ... });
+Route::group(['middleware' => ['permission:publish articles|edit articles']], function () { ... });
+Route::group(['middleware' => ['role_or_permission:manager|edit articles']], function () { ... });
+```
+
 ## Tips
 
 ```php
@@ -424,6 +526,7 @@ Log::info
 
 ```bash
 php artisan cache:forget spatie.permission.cache
+php artisan permission:cache-reset
 ```
 
 ```bash
