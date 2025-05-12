@@ -539,6 +539,8 @@ Route::group(['middleware' => ['role_or_permission:manager|edit articles']], fun
 از Performance Schema یا slow query log برای شناسایی ایندکس‌های کم‌کاربرد استفاده کنید و در صورت لزوم آنها را حذف کنید تا نوشتن‌ها کند نشود 
 ## Tips
 
+> کوئری‌های پرتکرار و داده‌های ثابت را با Cache::remember() یا پکیج‌هایی مثل Redis در حافظه ذخیره کنید تا هر بار به دیتابیس کوئری زده نشود
+
 ```php
 Log::info
 ```
