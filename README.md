@@ -331,11 +331,160 @@ docker cp /User/brad/Desktop/laravel-projects/ourmainapp cranky_franklin:/var/ww
 > <img src="./images/copy-files-to-docker.png" style="border: 1px solid white; width: 900px; display: block;" />
 > you can see that nginx by default has an HTML folder that is what contains the files for this default Welcome to nginx project
 
-So what we need to do now is simply, instead of just serving up this default website, we want nginx to serve up our new files. We want to serve the "public" folder.
+So what we need to do now is simply, instead of just serving up this default website, we want nginx to serve up our new files. We want to serve the "public" folder. be more specific, We want to serve the public folder. Now, don't worry, when we go through the lesson where we actually set this up on a real vps, I'll show you how to enable multiple websites within an engineX server. Because one server can host ten domains. But just for this simple Docker example I'm actually just going to edit the default file for this default engineX site. Let me show you what I have in mind
+
+<img src="./images/docker.png" style="border: 1px solid white; width: 900px; display: block;" />
+
+<img src="./images/default-docker.png" style="border: 1px solid white; width: 900px; display: block;" />
+
+I'm actually going to completely erase this configuration and we're just going to paste in our own. The idea is that this is where you say, Hey engineX, I want to use PHP and so on and so forth
+
+```bash
+rm default
+touch default
+```
+
+At this point we just need to restart engineX so that it uses that new configuration file
+
+```bash
+/etc/init.d/nginx restart
+```
+
+Also let's start up our PHP service
+
+```bash
+/etc/init.d/php8.1-fpm start
+```
+
+At this point, we should be able to visit our Laravel application
+
+<img src="./images/docker-errors-1.png" style="border: 1px solid black; width: 900px; display: block;" />
+
+So this first error message that we see from Laravel is just that our storage folder does not have the correct permissions. We want to give the storage folder proper permissions
+
+```bash
+chown -R www-data:www-data storage
+```
+
+to change max_file_uploads
+
+```bash
+nano /etc/php/8.1/fpm/php.ini
+```
+
+search for upload_max_filesize
+
+you would need to restart your PHP service
+
+```bash
+/etc/init.d/php8.1-fpm restart
+```
+
+go to .env
+
+```dotenv
+APP_ENV=production
+APP_DEBUG=false
+```
+
+even if I start the container, I'm still not able to visit local host in the browser. Now, this would never happen in a real VPS, but because we're using a Docker container, Docker containers, do not have an init system, So in other words, when you restart the container, it's not going to automatically start the PHP service in the background or the MySQL database in the background or the engineX web server in the background.
+
+ok open the container terminal and it would run all of these for me. I would create a new file
+
+```bash
+/etc/init.d/mysql start
+/etc/init.d/php8.1-fpm start
+/etc/init.d/nginx start
+```
+
+it is good to create a startup script file and then I could just run one single command and
+
+```bash
+touch /ourstartup
+nano /ourstartup
+```
+
+And in this file, we're just going to create a bash script
+
+```bash
+#!/bin/bash
+/etc/init.d/mysql start
+/etc/init.d/php8.1-fpm start
+/etc/init.d/nginx start
+```
+
+Now we do need to make that file executable
+
+```bash
+chmod u+x /our
+```
+
+now if we stop and again start container, we just
+
+```bash
+/ourstartup
+```
+
+At this point, let's go ahead and set up an automated way to run our queue worker and also our schedule worker. you don't want to have to manually run this every time your server boots up. So to make that happen, we're going to install something called cron.
+
+```bash
+sudo apt install cron
+```
+
+And now that we have Cron installed, we just want to add a job and we can specify when or how often it should be called.
+
+```bash
+crontab -e
+```
+
+this is essentially saying every minute:
+We want to spell it out in a way using absolute paths:
+
+```
+* * * * * /usr/bin/php /var/www/ourapp/artisan queue: work --max-time=60
+* * * * * /usr/bin/php /var/www/ourapp/artisan schedule:run
+```
+
+And then we don't just want to let it run forever, Let's just let it run for exactly one minute.
+for schedule: This one is a bit different We don't need to include max time because this doesn't just run in the background forever, Instead it just runs, it does its job and then it's done. We're just going to recall it once every minute to see if there's any scheduled jobs that need to be called cool.
+And now we just need to tell the cron job service to actually run in the background
+
+```bash
+/etc/init.d/cron start
+```
+
+and now, we add cron to /appstartup:
+
+```bash
+#!/bin/bash
+/etc/init.d/mysql start
+/etc/init.d/php8.1-fpm start
+/etc/init.d/nginx start
+/etc/init.d/cron start
+```
+
+For our final detail in this lesson I want to use Redis
+
+```bash
+sudo apt install redis-server
+composer require predis/predis
+```
+
+in .env
+
+```dotenv
+CACHE_DRIVER=redis
+QUEUE_CONNECTION=redis
+REDIS_CLIENT=predis
+```
+
+```bash
+/etc/init.d/redis-server start
+```
+
+and add to startup file
 
 ## spatie/laravel-permission
-
-
 
 ```php
 use Spatie\Permission\Models\Role;
@@ -346,6 +495,7 @@ $permission = Permission::create(['name' => 'edit articles']);
 ```
 
 Assign A Permission To A Role:
+
 ```php
 $role->givePermissionTo($permission);
 $permission->assignRole($role);
@@ -353,12 +503,14 @@ $permission->assignRole($role);
 
 Sync Permissions To A Role:
 Multiple permissions:
+
 ```php
 $role->syncPermissions($permissions);
 $permission->syncRoles($roles);
 ```
 
 Remove Permission From A Role:
+
 ```php
 $role->revokePermissionTo($permission);
 $permission->removeRole($role);
@@ -379,17 +531,18 @@ $roles = $user->getRoleNames(); // Returns a collection
 ```
 
 The role and withoutRole scopes can accept a string, a `\Spatie\Permission\Models\Role` object or an `\Illuminate\Support\Collection` object:
+
 ```php
 $users = User::role('writer')->get(); // Returns only users with the role 'writer'
 $nonEditors = User::withoutRole('editor')->get(); // Returns only users without the role 'editor'
 ```
 
 The scope can accept a string, a `\Spatie\Permission\Models\Permission` object or an `\Illuminate\Support\Collection` object:
+
 ```php
 $users = User::permission('edit articles')->get(); // Returns only users with the permission 'edit articles' (inherited or directly)
 $usersWhoCannotEditArticles = User::withoutPermission('edit articles')->get(); // Returns all users without the permission 'edit articles' (inherited or directly)
 ```
-
 
 ```php
 $allUsersWithAllTheirRoles = User::with('roles')->get();
@@ -414,6 +567,7 @@ $user->revokePermissionTo('edit articles');
 ```
 
 Or revoke & add new permissions in one go:
+
 ```php
 $user->syncPermissions(['edit articles', 'delete articles']);
 ```
@@ -479,6 +633,7 @@ $user->hasAllRoles(Role::all());
 
 $user->hasExactRoles(Role::all()); ???
 ```
+
 The assignRole, hasRole, hasAnyRole, hasAllRoles, hasExactRoles and removeRole functions can accept a string, a \Spatie\Permission\Models\Role object or an \Illuminate\Support\Collection object.
 
 ```php
@@ -521,27 +676,33 @@ Route::group(['middleware' => ['role_or_permission:manager|edit articles']], fun
 ## index
 
 ### کنترل هزینهٔ نوشتن
+
 هر ایندکس اضافه بار در عملیات INSERT/UPDATE/DELETE دارد؛ بنابراین جداول و ستون‌هایی را ایندکس کنید که بیشترین تاثیر را در کوئری‌های گزارش‌گیری و خواندن دارند
 
 ### شناسایی ستون‌های مناسب برای ایندکس
+
 #### تحلیل کوئری‌ها با EXPLAIN
+
 1. کوئری‌های کند یا پرتکرار را با EXPLAIN SELECT ... اجرا کنید.
 2. در خروجی ستون‌های key و possible_keys را ببینید؛ اگر key روی NULL باشد یعنی ایندکس استفاده نمی‌شود
 3. ستون‌هایی که در WHERE، ORDER BY یا JOIN ظاهر می‌شوند و بدون ایندکس اسکن کامل (ALL) دارند، گزینه‌های اولیهٔ شما هستند
 
 ### پایش و نگهداری
+
 - مانیتورینگ با Laravel Telescope و Debugbar
-کوئری‌ها، زمان پاسخ و مصرف حافظه را در محیط توسعه و تولید رصد کنید 
+  کوئری‌ها، زمان پاسخ و مصرف حافظه را در محیط توسعه و تولید رصد کنید
 - بررسی دوره‌ای و حذف ایندکس‌های بلااستفاده
-از Performance Schema یا slow query log برای شناسایی ایندکس‌های کم‌کاربرد استفاده کنید و در صورت لزوم آنها را حذف کنید تا نوشتن‌ها کند نشود
+  از Performance Schema یا slow query log برای شناسایی ایندکس‌های کم‌کاربرد استفاده کنید و در صورت لزوم آنها را حذف کنید تا نوشتن‌ها کند نشود
 
 ### tips
+
 1. حذف ایندکس در متد down
+
 ## Tips
 
 > کوئری‌های پرتکرار و داده‌های ثابت را با Cache::remember() یا پکیج‌هایی مثل Redis در حافظه ذخیره کنید تا هر بار به دیتابیس کوئری زده نشود
 
-> مانیتورینگ با Laravel Telescope و Debugbar: کوئری‌ها، زمان پاسخ و مصرف حافظه را در محیط توسعه و تولید رصد کنید 
+> مانیتورینگ با Laravel Telescope و Debugbar: کوئری‌ها، زمان پاسخ و مصرف حافظه را در محیط توسعه و تولید رصد کنید
 
 ```php
 Log::info
