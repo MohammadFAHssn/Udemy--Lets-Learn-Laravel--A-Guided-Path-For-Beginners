@@ -511,6 +511,14 @@ if you run
 exit
 ```
 
+### Using A Domain
+
+There seem to be some complications.(https://techdocs.akamai.com/cloud-computing/docs/getting-started-with-dns-manager#register-the-domain)
+
+```bash
+ssh root@yourDomainName.enyThing!
+```
+
 ## spatie/laravel-permission
 
 ```php
