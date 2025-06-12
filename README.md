@@ -484,6 +484,33 @@ REDIS_CLIENT=predis
 
 and add to startup file
 
+## Deploying To Actual VPS
+
+Anyways, right now what we want to do is ssh or log in to this machine so that we can get into its command line and actually start doing something useful. So you can see right here there's SSH access and that's going to give you a command, But it's not rocket. let's go connect so you can open up a terminal on your computer
+our user account is root:
+
+```bash
+ssh root@172.16.20.64
+```
+
+you are logged in now.
+let's install engineX just because I want to be able to visit my IP address in my web browser. right now Currently, if I try to visit it, I see this site can't be reached and that's because this is a brand new, fresh computer It's not listening for incoming requests It's it's not a web server by default. We want to begin listening on Port 80, Now, don't worry, Eventually we'll set up HTTPS encryption And then we would also want to listen on Port 443.
+
+```bash
+sudo apt update
+sudo apt install nginx
+```
+
+```bash
+htop
+```
+
+if you run
+
+```bash
+exit
+```
+
 ## spatie/laravel-permission
 
 ```php
