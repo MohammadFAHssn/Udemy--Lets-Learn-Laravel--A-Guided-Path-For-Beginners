@@ -638,6 +638,11 @@ nano authorized_keys
 
 and then you just paste in the contents of your public key file, which is id_ed25519.pub
 
+### The Environment That Laravel Needs
+
+press ctrl + f and search for "now we want to install some necessary tools:"
+instal from php-cli to end
+
 ## spatie/laravel-permission
 
 ```php
