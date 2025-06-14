@@ -301,9 +301,8 @@ Now, if we were on a real actual Linux computer nginx would start up automatical
 
 This is just the default welcome or starter site that's being hosted, we can create a new site for nginx to host
 
-now we want ot install some necessary tools:
+now we want to install some necessary tools:
 php:
-Shouldn't we install PHP itself???
 
 > <img src="./images/install-php.png" style="border: 1px solid white; width: 900px; display: block;" />
 >
@@ -518,6 +517,126 @@ There seem to be some complications.(https://techdocs.akamai.com/cloud-computing
 ```bash
 ssh root@yourDomainName.enyThing!
 ```
+
+one VPS, one server could actually host like 10 or 20 or 100 different domains.
+Because what if you bought ten different domains and you wanted all of them to be hosted on just this one $5 a month VPS box
+we can manage it by nginx:
+
+```bash
+cd /etc/nginx
+ls
+```
+
+you see that nginx has a folder called sites-available and sites-enabled So the idea is that you can create different sites, different projects or domains in the sites-available folder, and then you just create like a symbolic link or shortcut so that it also exists in sites-enabled
+
+```bash
+cd sites-available
+ls
+```
+
+yes, there's just the one file named default. And that's what's powering sort of your default website when you visit the server on port 80 or in the future we'll visit 443 but port 8 for just http.
+so that file named Default in sites-available, That's what we're seeing here.
+However, what if you wanted to host multiple domains or sites from this one VPS.
+
+```bash
+touch mysite
+nano mysite
+```
+
+```
+server{
+  listen 80;
+  server_name mysite.com www.mysite.com;
+
+  location / {
+    root /var/www/mysite;
+    index index.html;
+  }
+}
+```
+
+And now let's just go create a folder in that expected location
+
+```bash
+cd /var/www
+ls
+```
+
+there's just the one folder named HTML. That HTML folder is what's powering this" Welcome to nginx default" screen.
+
+```bash
+mkdir mysite
+cd mysite
+mkdir index.html
+nano index.html
+```
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My Site</title>
+  </head>
+  <body>
+    <h1>Welcome to My Site</h1>
+  </body>
+</html>
+```
+
+```bash
+cd /etc/nginx/sites-enabled
+ls
+```
+
+So what we want to do now, to actually enable this new site is create a shortcut or a link so that this file virtually also lives in the site-enabled folder
+
+```bash
+sudo ln -s /etc/nginx/sites-available/mysite /etc/nginx/sites-enabled/ # ln for create a link and -s for symbolic link
+```
+
+```bash
+sudo systemctl restart nginx
+```
+
+### using ssh keys instead of password
+
+if there was just a file on my personal computer and then the server could just trust me.
+Now, first of all, you might already have an SSH key on your computer. Let me show you how you can check for that. So first I'll show you If you were on windows
+
+```bash
+cd C:\Users\your_username\.ssh
+```
+
+Now inside that directory there are two files: id_ed25519 and id_ed25519.pub. The first one is your private key, and the second one is your public key. the file that ends in dot pub, it contains a value that you can share with trusted sources like, you know, GitHub, GitLab, Bitbucket or in our case, you know, our own $5 a month VPS.
+let me show you how you could create one
+
+```bash
+mkdir .ssh
+cd .ssh
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
+
+```bash
+code id_ed25519.pub
+```
+
+```bash
+ssh root@your_domain_or_ip
+```
+
+```bash
+cd ~
+cd .ssh
+ls
+```
+
+there's a file named authorized_keys.
+
+```bash
+nano authorized_keys
+```
+
+and then you just paste in the contents of your public key file, which is id_ed25519.pub
 
 ## spatie/laravel-permission
 
