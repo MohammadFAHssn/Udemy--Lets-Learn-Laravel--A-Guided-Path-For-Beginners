@@ -641,7 +641,175 @@ and then you just paste in the contents of your public key file, which is id_ed2
 ### The Environment That Laravel Needs
 
 press ctrl + f and search for "now we want to install some necessary tools:"
-instal from php-cli to end
+install from php-cli to end.
+
+### Using Git To Push Files To Our VPS
+
+I don't want to ignore the public build folder(/public/build) because I'm happy to just run `NPM run build` on my local host computer and then just send those files over through git.
+our VPS isn't set up yet for us to be able to push this repository to our VPS
+
+```bash
+ssh root@your_domain_or_ip
+cd /var/www
+mkdir ourapp # That is where our actual Laravel Files will live, that's not where we're going to push our files directly from our host computer
+mkdir ourrepo
+cd ourrepo
+mkdir ourapp
+```
+
+So the idea is that we're going to push our git files from our host computer into our repos and then the server will detect once a push has actually completed Like once 100% of the files have actually been transferred onto this computer's hard drive Only then we can set up an automated script that will copy the entire folder all at once into our app
+
+```bash
+git config --global init.defaultBranch main # ??? master
+```
+
+Now we're ready to turn this folder into a bare git repository
+
+```bash
+git init --bare
+ls
+cd hooks
+ls
+```
+
+you can see there are all sorts of different hooks or events that you could hook onto. In other words, when a certain event happens then this script will automatically run
+
+```bash
+touch post-receive #And this name is important I'm not making this up
+nano post-receive
+```
+
+```bash
+#!/bin/bash
+git --work-tree=/var/www/ourapp --git-dir=/var/www/ourrepo/ourapp checkout -f
+```
+
+Now, we do need to change the permissions on that file so that it can be executable
+
+```bash
+chmod +x post-receive
+```
+
+So now our VPS is set up as a git server, go back to your host computer and
+
+```bash
+git remote add production ssh://root@your_domain_or_ip/var/www/ourrepo/ourapp
+git push production main
+```
+
+And what's really cool is because we already added our public ssh key to our server, it can trust us
+
+let's go edit our nginx configuration file.
+
+```bash
+cd /etc/nginx/sites-available
+nano ourapp
+```
+
+```nginx
+server {
+  listen [::]:80;
+  listen 80;
+  server_name your_domain_or_ip www.your_domain_or_ip; # Replace with your actual domain or IP
+  root /var/www/ourapp/public;
+
+  client_max_body_size 10M; # Adjust as needed
+
+  add_header X-Frame-Options "SAMEORIGIN";
+  add_header X-XSS-Protection "1; mode=block";
+  add_header X-Content-Type-Options "nosniff";
+
+  index index.html index.htm index.php;
+
+  charset utf-8;
+
+  location / {
+    try_files $uri $uri/ /index.php?$query_string;
+  }
+
+  location = /favicon.ico { access_log off; log_not_found off; }
+  location = /robots.txt  { access_log off; log_not_found off; }
+
+  error_page 404 /index.php;
+
+  location ~ \.php$ {
+    fastcgi_pass unix:/var/run/php/php8.1-fpm.sock; # Ensure this path matches your PHP-FPM socket
+    fastcgi_index index.php;
+    fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+    include fastcgi_params;
+  }
+
+  # Deny access to hidden files
+  location ~ /\.(?!well-known).* {
+    deny all;
+  }
+}
+```
+
+And then we just need to enable this site and restart nginx:
+
+```bash
+sudo systemctl restart nginx
+sudo ln -s /etc/nginx/sites-available/ourapp /etc/nginx/sites-enabled/
+```
+
+edit .env file
+
+```bash
+touch .env
+nano .env
+```
+
+ans edit it:
+for example: delete APP_URL=http://localhost line
+
+and then migration
+
+We want to give the storage folder proper permissions
+
+```bash
+chown -R www-data:www-data storage
+```
+
+to change upload_max_filesize
+
+```bash
+nano /etc/php/8.1/fpm/php.ini
+```
+
+search for upload_max_filesize
+
+you would need to restart your PHP service
+
+```bash
+sudo systemctl restart php8.1-fpm
+```
+
+```bash
+sudo apt instal redis-server
+composer require predis/predis
+nano .env
+```
+
+```dotenv
+CACHE_DRIVER=redis
+QUEUE_CONNECTION=redis
+REDIS_CLIENT=predis
+```
+
+Let's set up our cron jobs to automatically run our queue worker and our schedule worker right once every minute
+maybe corn is installed, or we have to install it.
+
+```bash
+crontab -e
+```
+
+```
+* * * * * /usr/bin/php /var/www/ourapp/artisan queue:work --max-time=60
+* * * * * /usr/bin/php /var/www/ourapp/artisan schedule:run
+```
+
+line 2: So that's not something that's going to run in the background for an extended period of time, It's just going to run and then close
 
 ## spatie/laravel-permission
 
@@ -885,4 +1053,8 @@ composer dump-autoload
 
 ```bash
 npm cache clean --force
+```
+
+```
+
 ```
