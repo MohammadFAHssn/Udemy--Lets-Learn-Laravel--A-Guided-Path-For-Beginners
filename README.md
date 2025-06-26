@@ -655,7 +655,121 @@ mkdir ourapp # That is where our actual Laravel Files will live, that's not wher
 mkdir ourrepo
 cd ourrepo
 mkdir ourapp
+cd ourapp
 ```
+
+because vue-app owned by root, we need to change the <b>ownership</b> to our user account
+
+```bash
+sudo chown -R blureen:blureen /var/www/our-repo/vue
+sudo chown -R blureen:blureen /var/www/vue
+```
+
+> عالی، بریم دقیق‌تر بررسی کنیم که این دستور `sudo chmod -R u+rwX path/` دقیقاً **چی کار می‌کنه، کجا استفاده می‌شه و چرا مهمه.**
+>
+> ---
+>
+> #### ✅ بررسی خط به خط دستور
+>
+> ```
+>
+> sudo chmod -R u+rwX path/
+>
+> ```
+>
+> ##### 1. `sudo`
+>
+> - یعنی اجرای دستور با **دسترسی مدیریتی (root)**.
+> - برای تغییر مجوز فایل‌هایی که متعلق به کاربرهای دیگر (مثل `www-data`) هستند، نیاز به `sudo` داریم.
+>
+> ---
+>
+> ##### 2. `chmod`
+>
+> - دستور **تغییر مجوز فایل‌ها** (change mode).
+> - مجوزها در لینوکس به سه دسته تقسیم می‌شن:
+>
+>   - **u** = user (مالک فایل)
+>   - **g** = group (گروه فایل)
+>   - **o** = others (بقیه)
+>   - و می‌تونی از `+`, `-`, `=` برای افزودن، حذف یا ست کردن مجوز استفاده کنی.
+>
+> ---
+>
+> ##### 3. `-R`
+>
+> - یعنی recursive → روی **تمام فایل‌ها و پوشه‌های زیرمجموعه** هم اعمال بشه.
+>
+> ---
+>
+> ##### 4. `u+rwX`
+>
+> این بخش خیلی مهمه. بیایم تکه‌تکه بررسی کنیم:
+>
+> ###### 🔹 `u+`
+>
+> - یعنی این مجوزها به **مالک فایل** (user/owner) اضافه شود.
+>
+> ###### 🔹 `r` → Read
+>
+> - اجازه‌ی **خواندن فایل یا لیست‌کردن محتویات پوشه** را به مالک می‌دهد.
+>
+> ###### 🔹 `w` → Write
+>
+> - اجازه‌ی **ویرایش یا حذف فایل** (یا ایجاد فایل در پوشه) را به مالک می‌دهد.
+>
+> ###### 🔹 `X` → Execute **فقط برای دایرکتوری‌ها یا فایل‌هایی که قبلاً اجراپذیر بودن**
+>
+> - این خیلی مهمه! `X` با `x` فرق داره:
+>
+> | علامت | اعمال به پوشه‌ها؟ | اعمال به فایل‌ها؟       |
+> | ----- | ----------------- | ----------------------- |
+> | `x`   | ✅                | ✅ (همه فایل‌ها)        |
+> | `X`   | ✅                | فقط اگر قبلاً `x` داشتن |
+>
+> → پس:
+>
+> - **تمام پوشه‌ها** اجرای آن‌ها برای مالک فعال می‌شود (یعنی بتونه داخلشون `cd` کنه).
+> - **فایل‌های اجرایی (مثل اسکریپت‌ها)** اگر قبلاً اجراپذیر بودن، همچنان اجراپذیر می‌مونن.
+>
+> ---
+>
+> #### 🛠 مثال کاربردی
+>
+> فرض کن پروژه‌ات در مسیر `/var/www/myapp` هست و تو کاربر `blureen` هستی. برای اینکه مطمئن شی که مالک پروژه (`blureen`) بتونه:
+>
+> - تمام فایل‌ها رو بخونه و ویرایش کنه
+> - وارد تمام پوشه‌ها بشه
+> - اما فایل‌های غیر اجرایی، بی‌دلیل اجراپذیر نشن
+>
+> این دستور عالیه:
+>
+> ```bash
+> sudo chmod -R u+rwX /var/www/myapp
+> ```
+>
+> ---
+>
+> #### 📌 چرا `X` به‌جای `x` استفاده می‌شه؟
+>
+> اگر از `+x` استفاده کنی، **همه فایل‌ها (حتی فایل‌های PHP، TXT، CSS)** اجراپذیر می‌شن که خطر امنیتی داره.
+> ولی با `+X` فقط پوشه‌ها و فایل‌هایی که قبلاً اجرایی بودن، اجراپذیر باقی می‌مونن. این یعنی:
+>
+> ✅‌ کار توسعه و دیباگ ساده‌تر
+> ❌ اما خطر اجرای فایل اشتباهی پایین‌تره
+>
+> ---
+>
+> #### ✅ جمع‌بندی تفاوت `+x` و `+X`
+>
+> | علامت | چه زمانی استفاده بشه؟                                                  |
+> | ----- | ---------------------------------------------------------------------- |
+> | `+x`  | وقتی می‌خوای **همه فایل‌ها اجراپذیر باشن** (مثل اسکریپت‌ها)            |
+> | `+X`  | وقتی می‌خوای **فقط پوشه‌ها** و **فایل‌های قبلاً اجرایی** اجراپذیر باشن |
+>
+> ---
+>
+> اگر خواستی مثالی واقعی با لاگ یا تغییر در یک مسیر خاص بررسی کنیم، یا بدونی چطور این دستور در کنار `chown` و `chgrp` استفاده می‌شه، بگو برات شرح می‌دم.
 
 So the idea is that we're going to push our git files from our host computer into our repos and then the server will detect once a push has actually completed Like once 100% of the files have actually been transferred onto this computer's hard drive Only then we can set up an automated script that will copy the entire folder all at once into our app
 
@@ -681,13 +795,28 @@ nano post-receive
 
 ```bash
 #!/bin/bash
-git --work-tree=/var/www/ourapp --git-dir=/var/www/ourrepo/ourapp checkout -f
+echo "==> Deploying code..."
+
+TARGET="/var/www/vue-app"
+BRANCH="main"
+
+GIT_WORK_TREE="$TARGET" git checkout -f "$BRANCH"
+
+echo "==> Done!"
 ```
 
 Now, we do need to change the permissions on that file so that it can be executable
 
 ```bash
 chmod +x post-receive
+```
+
+> چی کار می‌کنه؟ مجوز اجرای فایل را اضافه می‌کنه.
+> معمولاً برای اسکریپت‌ها استفاده میشه.
+> یعنی: این فایل حالا می‌تونه به‌صورت برنامه اجرا بشه (./script.sh).
+
+```bash
+git config --global --add safe.directory /var/www/repo/vue-app
 ```
 
 So now our VPS is set up as a git server, go back to your host computer and
@@ -753,6 +882,19 @@ sudo systemctl restart nginx
 sudo ln -s /etc/nginx/sites-available/ourapp /etc/nginx/sites-enabled/
 ```
 
+read README.md file in laravel project
+
+```bash
+blureen@blureen:/var/www/laravel-app/secrets/jwt$ sudo chown www-data:www-data private.pem public.pem
+blureen@blureen:/var/www/laravel-app$ sudo systemctl restart nginx
+blureen@blureen:/var/www/laravel-app$ sudo usermod -aG www-data blureen
+[sudo] password for blureen:
+blureen@blureen:/var/www/laravel-app$ exit
+blureen@blureen:~$ sudo chmod 644 /var/www/laravel-app/secrets/jwt/public.pem
+[sudo] password for blureen:
+blureen@blureen:~$ sudo chmod 640 /var/www/laravel-app/secrets/jwt/private.pem
+```
+
 edit .env file
 
 ```bash
@@ -810,6 +952,87 @@ crontab -e
 ```
 
 line 2: So that's not something that's going to run in the background for an extended period of time, It's just going to run and then close
+
+### for vue
+
+```nginx
+server {
+    listen 80;
+    listen [::]:80; # Listen on IPv6 as well
+    server_name 172.16.20.20 your_domain.com; # Add your domain if applicable
+
+    root /var/www/vue-app/dist;
+    index index.html;
+
+    server_tokens off; # Hide Nginx version
+
+    # Logging
+    access_log /var/log/nginx/vue-app.access.log;
+    error_log /var/log/nginx/vue-app.error.log;
+
+    # Security Headers
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    # add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:;" always; # Adjust CSP as needed
+
+    # Gzip Compression
+    gzip on;
+    gzip_vary on;
+    gzip_proxied any;
+    gzip_comp_level 6;
+    gzip_buffers 16 8k;
+    gzip_http_version 1.1;
+    gzip_min_length 256;
+    gzip_types
+        application/atom+xml
+        application/javascript
+        application/json
+        application/ld+json
+        application/manifest+json
+        application/rss+xml
+        application/vnd.geo+json
+        application/vnd.ms-fontobject
+        application/x-font-ttf
+        application/x-web-app-manifest+json
+        application/xhtml+xml
+        application/xml
+        font/eot
+        font/opentype
+        font/otf
+        image/bmp
+        image/svg+xml
+        image/x-icon
+        text/cache-manifest
+        text/css
+        text/javascript
+        text/plain
+        text/vcard
+        text/vnd.rim.location.xloc
+        text/vtt
+        text/x-component
+        text/x-cross-domain-policy;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location ~* \.(?:ico|css|js|gif|jpe?g|png|otf|woff|woff2?|eot|ttf|svg|webp)$ {
+        expires 6M;
+        access_log off;
+        add_header Cache-Control "public, max-age=15552000"; # 6 months in seconds
+        # add_header Access-Control-Allow-Origin *; # Only if truly needed for cross-origin requests to these assets
+    }
+
+    # Custom error page for 404, ensures SPA handles routing
+    error_page 404 /index.html;
+
+    # Deny access to hidden files
+    location ~ /\. {
+        deny all;
+    }
+}
+```
 
 ## spatie/laravel-permission
 
