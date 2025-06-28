@@ -1,5 +1,9 @@
 # Udemy - Let's Learn Laravel A Guided Path For Beginners 2023
 
+## Configuration
+
+All of the configuration files for the Laravel framework are stored in the config directory.
+
 ## Commands
 
 ```bash
