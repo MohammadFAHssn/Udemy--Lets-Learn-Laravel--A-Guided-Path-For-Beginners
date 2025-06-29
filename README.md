@@ -4,6 +4,76 @@
 
 All of the configuration files for the Laravel framework are stored in the config directory.
 
+Laravel can display an overview of your application's configuration, drivers, and environment via the about Artisan command.
+
+```bash
+php artisan about
+```
+
+Or, to explore a specific configuration file's values in detail, you may use the config:show Artisan command:
+
+```bash
+php artisan config:show database
+```
+
+### dotenv
+
+If you are developing with a team, you may wish to continue including and updating the .env.example file with your application. By putting placeholder values in the example configuration file, other developers on your team can clearly see which environment variables are needed to run your application.
+
+#### Additional Environment Files
+
+Before loading your application's environment variables, Laravel determines if an APP_ENV environment variable has been externally provided or if the --env CLI argument has been specified. If so, Laravel will attempt to load an .env.[APP_ENV] file if it exists. If it does not exist, the default .env file will be loaded.
+
+```bash
+php artisan config:cache --env=local
+```
+
+#### Encrypting Environment Files
+
+Unencrypted environment files should never be stored in source control. However, Laravel allows you to encrypt your environment files so that they may safely be added to source control with the rest of your application.
+
+```bash
+PS D:\projects\blureen-laravel> php artisan env:encrypt --env=local
+
+  What encryption key would you like to use? [Generate a random encryption key]
+  Generate a random encryption key ........................................................................................................ generate
+  Provide an encryption key .................................................................................................................... ask
+❯
+
+   INFO  Environment successfully encrypted.
+
+  Key .......................................................................................... ***
+  Cipher ............................................................................................................................... AES-256-CBC
+  Encrypted file .................................................................................. D:\projects\blureen-laravel\.env.local.encrypted
+```
+
+```bash
+PS D:\projects\blureen-laravel> php artisan env:encrypt --env=production
+
+  What encryption key would you like to use? [Generate a random encryption key]
+  Generate a random encryption key ........................................................................................................ generate
+  Provide an encryption key .................................................................................................................... ask
+❯
+
+   INFO  Environment successfully encrypted.
+
+  Key .......................................................................................... ***
+  Cipher ............................................................................................................................... AES-256-CBC
+  Encrypted file ............................................................................. D:\projects\blureen-laravel\.env.production.encrypted
+```
+
+```
+PS D:\projects\blureen-laravel> php artisan env:decrypt --env=local
+
+  What is the decryption key?
+❯
+
+
+   INFO  Environment successfully decrypted.
+
+  Decrypted file ............................................................................................ D:\projects\blureen-laravel\.env.local
+```
+
 ## Commands
 
 ```bash
@@ -1279,9 +1349,9 @@ composer dump-autoload
 ```
 
 ```bash
+php artisan config:cache --env=local # or production
+```
+
+```bash
 npm cache clean --force
-```
-
-```
-
 ```
