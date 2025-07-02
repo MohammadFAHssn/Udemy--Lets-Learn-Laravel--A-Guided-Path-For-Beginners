@@ -16,6 +16,27 @@ Or, to explore a specific configuration file's values in detail, you may use the
 php artisan config:show database
 ```
 
+You may easily access your configuration values in config/something.php in using:
+
+```php
+// Retrieve a default value if the configuration value does not exist...
+$value = config('app.timezone', 'Asia/Seoul');
+```
+
+To set configuration values at runtime,
+
+```php
+config(['app.timezone' => 'America/Chicago']);
+```
+
+To give your application a speed boost, you should cache all of your configuration files into a single file using the `config:cache` Artisan command.
+
+You should typically run the php artisan config:cache command as part of your production deployment process. The command should not be run during local development as configuration options will frequently need to be changed during the course of your application's development.
+
+Once the configuration has been cached, your application's .env file will not be loaded by the framework during requests or Artisan commands; therefore, the env function will only return external, system level environment variables.
+
+For this reason, you should ensure you are only calling the env function from within your application's configuration (config) files. Configuration values may be accessed from anywhere in your application using the config function described above.
+
 ### dotenv
 
 If you are developing with a team, you may wish to continue including and updating the .env.example file with your application. By putting placeholder values in the example configuration file, other developers on your team can clearly see which environment variables are needed to run your application.
@@ -1338,18 +1359,14 @@ php artisan permission:cache-reset
 ```
 
 ```bash
+composer dump-autoload
 php artisan optimize:clear
 php artisan config:clear
-php artisan optimize
 php artisan clear-compiled
+php artisan optimize
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-composer dump-autoload
-```
-
-```bash
-php artisan config:cache --env=local # or production
 ```
 
 ```bash
