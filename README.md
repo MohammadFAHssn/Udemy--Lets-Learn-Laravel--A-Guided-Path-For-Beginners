@@ -1361,9 +1361,6 @@ php artisan permission:cache-reset
 ```bash
 composer dump-autoload
 php artisan optimize:clear
-php artisan config:clear
-php artisan clear-compiled
-php artisan optimize
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
