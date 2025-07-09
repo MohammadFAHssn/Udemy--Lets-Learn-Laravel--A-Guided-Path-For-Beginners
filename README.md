@@ -37,6 +37,18 @@ Once the configuration has been cached, your application's .env file will not be
 
 For this reason, you should ensure you are only calling the env function from within your application's configuration (config) files. Configuration values may be accessed from anywhere in your application using the config function described above.
 
+### Configuration Publishing
+
+Most of Laravel's configuration files are already published in your application's config directory; however, certain configuration files like cors.php and view.php are not published by default, as most applications will never need to modify them.
+
+However, you may use the config:publish Artisan command to publish any configuration files that are not published by default:
+
+```bash
+php artisan config:publish
+
+php artisan config:publish --all
+```
+
 ### dotenv
 
 If you are developing with a team, you may wish to continue including and updating the .env.example file with your application. By putting placeholder values in the example configuration file, other developers on your team can clearly see which environment variables are needed to run your application.
