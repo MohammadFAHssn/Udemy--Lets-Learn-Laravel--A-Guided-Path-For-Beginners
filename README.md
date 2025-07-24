@@ -1257,6 +1257,8 @@ Route::group(['middleware' => ['role_or_permission:manager|edit articles']], fun
 
 > The public directory contains the index.php file, which is the entry point for all requests entering your application and configures autoloading.
 
+> The storage/app/public directory may be used to store user-generated files, such as profile avatars, that should be publicly accessible. You should create a symbolic link at public/storage which points to this directory. You may create the link using the php artisan storage:link Artisan command.
+
 ### Explanation of `routes/console.php` in Laravel
 
 This file is where you define **closure-based Artisan commands**. It provides a lightweight way to create custom console commands without generating dedicated command classes. Here's a breakdown:
