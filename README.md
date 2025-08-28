@@ -954,6 +954,15 @@ crontab -e
 
 line 2: So that's not something that's going to run in the background for an extended period of time, It's just going to run and then close
 
+###
+
+when you remove /var/www/laravel-app/storage/logs/laravel.log file, you should
+
+```bash
+sudo chown -R www-data:www-data storage bootstrap/cache
+sudo chmod -R 775 storage bootstrap/cache
+```
+
 ### for vue
 
 ```nginx
